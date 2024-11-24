@@ -4,18 +4,20 @@
  */
 package com.work.backend_report.service;
 
-import com.work.backend_report.repository.ReportRepository;
-import com.work.backend_report.record.ReportSummary;
-import com.work.backend_report.enumeration.Project;
-import com.work.backend_report.entity.Report;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.work.backend_report.entity.Report;
+import com.work.backend_report.enumeration.Project;
+import com.work.backend_report.record.ReportSummary;
+import com.work.backend_report.repository.ReportRepository;
 
 /**
  *
@@ -32,7 +34,7 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
 
-    public Report createReport(String partnerName, Project project) {
+    public Report createReport(String partnerName, Project project, String notes) {
         // Set current time in UTC
         Instant now = Instant.now();
         Report report = new Report(
@@ -42,7 +44,8 @@ public class ReportService {
                 new Date(), // Current Date
                 null, // Current Time (UTC)
                 null, // Ending hour can be set later
-                project
+                project,
+                notes
         );
 
         report.setStartingHour(now);  // Convert and store in Asia/Jakarta timezone
@@ -63,7 +66,7 @@ public class ReportService {
 
     public List<ReportSummary> getAllReports() {
         return reportRepository.findAll().stream()
-                .map(report -> new ReportSummary(report.getUid(), report.getPartnerName(), report.getSupportTime(), report.getProject()))
+                .map(report -> new ReportSummary(report.getUid(), report.getPartnerName(), report.getSupportTime(), report.getProject(),report.getSupportDate(), report.getNote()))
                 .collect(Collectors.toList());
     }
 }

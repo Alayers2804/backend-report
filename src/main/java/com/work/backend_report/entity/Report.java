@@ -4,18 +4,23 @@
  */
 package com.work.backend_report.entity;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
+
+import org.hibernate.annotations.GenericGenerator;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.work.backend_report.enumeration.Project;
-import java.util.UUID;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.time.*;
-import java.util.Date;
-import java.util.Objects;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -46,10 +51,12 @@ public class Report {
     
     private Project project;
 
+    private String notes;
+
     public Report() {
     }
 
-    public Report(UUID uid, String partnerName, int supportTime, Date supportDate, Date startingHour, Date endingHour, Project project) {
+    public Report(UUID uid, String partnerName, int supportTime, Date supportDate, Date startingHour, Date endingHour, Project project, String notes) {
         this.uid = uid;
         this.partnerName = partnerName;
         this.supportTime = supportTime;
@@ -57,20 +64,23 @@ public class Report {
         this.startingHour = startingHour;
         this.endingHour = endingHour;
         this.project = project;
-
+        this.notes = notes;
     }
 
-    public UUID getUid() {
-        return uid;
+    public String getUid() {
+        return this.uid.toString();
     }
 
     public String getPartnerName() {
-        return "[" + this.project + "] " + this.partnerName;
+        if (this.notes == null || this.notes.isBlank()){
+            this.notes = "no project";
+        }
+        return "[" + this.project + "] " + this.partnerName + " (" + this.notes + ")";
     }
 
     public Date getSupportDate() {
         return this.supportDate;
-    }
+    }   
 
     public int getSupportTime() {
         return this.supportTime;
@@ -86,6 +96,10 @@ public class Report {
     
     public Project getProject(){
         return this.project;
+    }
+
+    public String getNote(){
+        return this.notes;
     }
 
     public void setUid(UUID uid) {
@@ -113,6 +127,14 @@ public class Report {
     
     public void setProject(Project project){
         this.project = project;
+    }
+    
+    public void setNotes(String notes){
+        this.notes = notes;
+    }
+
+    public void setSupportDate(Date supportDate){
+        this.supportDate = supportDate;
     }
 
     @Override

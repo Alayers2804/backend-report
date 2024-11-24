@@ -2,6 +2,7 @@ package com.work.backend_report.service;
 
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFDataFormat;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -37,16 +38,22 @@ public class ReportGeneratorService {
         try (HSSFWorkbook workbook = new HSSFWorkbook()) {
             HSSFSheet sheet = workbook.createSheet("Reports Summary");
             HSSFRow row = sheet.createRow(0);
-            row.createCell(1).setCellValue("nama mitra");
-            row.createCell(2).setCellValue("waktu support");
+            row.createCell(0).setCellValue("uid");
+            row.createCell(1).setCellValue("Tanggal Support");
+            row.createCell(2).setCellValue("Nama Mitra");
+            row.createCell(3).setCellValue("waktu support");
             HSSFCellStyle dateCellStyle = workbook.createCellStyle();
             HSSFDataFormat dateFormat = workbook.createDataFormat();
-            dateCellStyle.setDataFormat(dateFormat.getFormat("dd-mm-yyyy"));
+            dateCellStyle.setDataFormat(dateFormat.getFormat("dd-MMMM-yyyy"));
             int dataRowIndex = 1;
             for (Report report : reports) {
                 HSSFRow dataRow = sheet.createRow(dataRowIndex);
-                dataRow.createCell(1).setCellValue(report.getPartnerName());
-                dataRow.createCell(2).setCellValue(report.getSupportTime());
+                dataRow.createCell(0).setCellValue(report.getUid());
+                HSSFCell dateCell = dataRow.createCell(1);
+                dateCell.setCellValue(report.getSupportDate());
+                dateCell.setCellStyle(dateCellStyle);
+                dataRow.createCell(2).setCellValue(report.getPartnerName());
+                dataRow.createCell(3).setCellValue(report.getSupportTime());
                 dataRowIndex++;
             }
             for (int i = 0; i < 4; i++) {

@@ -8,4 +8,4 @@ package com.work.backend_report.record;
  *
  * @author ferdi
  */
-public record ApiResponse<T>(boolean success, String message, T data) {}
+public record ApiResponse<T>(boolean error, String message, T data) {}

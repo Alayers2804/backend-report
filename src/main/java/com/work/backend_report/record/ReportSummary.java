@@ -4,7 +4,7 @@
  */
 package com.work.backend_report.record;
 
-import java.util.UUID;
+import java.util.Date;
 
 import com.work.backend_report.enumeration.Project;
 
@@ -13,6 +13,6 @@ import com.work.backend_report.enumeration.Project;
  * @author ferdi
  */
 
-public record ReportSummary(UUID uid, String partnerName, int supportTime, Project project) {
+public record ReportSummary(String uid, String partnerName, int supportTime, Project project, Date supportDate, String notes) {
     
 }
