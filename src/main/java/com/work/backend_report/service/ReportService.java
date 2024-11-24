@@ -34,7 +34,7 @@ public class ReportService {
         this.reportRepository = reportRepository;
     }
 
-    public Report createReport(String partnerName, Project project) {
+    public Report createReport(String partnerName, Project project, String notes) {
         // Set current time in UTC
         Instant now = Instant.now();
         Report report = new Report(
@@ -44,7 +44,8 @@ public class ReportService {
                 new Date(), // Current Date
                 null, // Current Time (UTC)
                 null, // Ending hour can be set later
-                project
+                project,
+                notes
         );
 
         report.setStartingHour(now);  // Convert and store in Asia/Jakarta timezone
@@ -65,7 +66,7 @@ public class ReportService {
 
     public List<ReportSummary> getAllReports() {
         return reportRepository.findAll().stream()
-                .map(report -> new ReportSummary(report.getUid(), report.getPartnerName(), report.getSupportTime(), report.getProject()))
+                .map(report -> new ReportSummary(report.getUid(), report.getPartnerName(), report.getSupportTime(), report.getProject(),report.getSupportDate(), report.getNote()))
                 .collect(Collectors.toList());
     }
 }

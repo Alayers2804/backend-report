@@ -38,13 +38,13 @@ public class ReportController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Report>> createReport(@RequestParam(required = true) String partnerName, @RequestParam(required = false) String project) throws ParseException {
+    public ResponseEntity<ApiResponse<Report>> createReport(@RequestParam(required = true) String partnerName, @RequestParam(required = false) String project, @RequestParam(required = true) String notes) throws ParseException {
 
         Report report = new Report();
 
         if (partnerName == null || partnerName.trim().isEmpty()) {
             return ResponseEntity.badRequest()
-                    .body(new ApiResponse<>(false, "Partner name is required", null));
+                    .body(new ApiResponse<>(true, "Partner name is required", null));
         }
 
         String normalizedProject = (project == null || project.trim().isEmpty())
@@ -53,15 +53,15 @@ public class ReportController {
 
         switch (normalizedProject) {
             case "MBA" ->
-                report = reportService.createReport(partnerName, Project.MBA);
+                report = reportService.createReport(partnerName, Project.MBA, notes);
             case "VSI" ->
-                report = reportService.createReport(partnerName, Project.VSI);
+                report = reportService.createReport(partnerName, Project.VSI, notes);
             default ->
-                report = reportService.createReport(partnerName, Project.OTHERS);
+                report = reportService.createReport(partnerName, Project.OTHERS, notes);
 
         }
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Successfully added the data", report));
+        return ResponseEntity.ok(new ApiResponse<>(false, "Successfully added the data", report));
     }
 
     @GetMapping
@@ -73,7 +73,7 @@ public class ReportController {
             return ResponseEntity.ok(new ApiResponse<>(true, "No reports found", reports));
         }
 
-        return ResponseEntity.ok(new ApiResponse<>(true, "Fetched all reports successfully", reports));
+        return ResponseEntity.ok(new ApiResponse<>(false, "Fetched all reports successfully", reports));
     }
 
     @PutMapping
@@ -82,21 +82,21 @@ public class ReportController {
         try {
             if (uid == null) {
                 return ResponseEntity.badRequest()
-                        .body(new ApiResponse<>(false, "Id is required", null));
+                        .body(new ApiResponse<>(true, "Id is required", null));
             }
 
             Report updateReport = reportService.findReportById(uid);
 
             if (updateReport == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(new ApiResponse<>(false, "Report with ID " + uid + " not found", null));
+                        .body(new ApiResponse<>(true, "Report with ID " + uid + " not found", null));
             }
 
             reportService.endReport(updateReport, supportTime);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Update successful", null));
+            return ResponseEntity.ok(new ApiResponse<>(false, "Update successful", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "An unexpected error occurred", null));
+                    .body(new ApiResponse<>(true, "An unexpected error occurred", null));
         }
     }
 
