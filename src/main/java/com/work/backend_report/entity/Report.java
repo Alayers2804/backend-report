@@ -65,7 +65,7 @@ public class Report {
     }
 
     public String getPartnerName() {
-        return this.partnerName;
+        return "[" + this.project + "] " + this.partnerName;
     }
 
     public Date getSupportDate() {
