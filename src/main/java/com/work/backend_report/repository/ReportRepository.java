@@ -5,6 +5,8 @@
 package com.work.backend_report.repository;
 
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,5 +18,7 @@ import com.work.backend_report.entity.Report;
  * @author ferdi
  */
 public interface ReportRepository extends JpaRepository<Report, UUID> {
+
+    List<Report> findBySupportDateBetween(LocalDate startingWeek, LocalDate endingWeek);
 }
 

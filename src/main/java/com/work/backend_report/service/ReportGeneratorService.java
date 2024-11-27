@@ -1,5 +1,6 @@
 package com.work.backend_report.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -31,8 +32,10 @@ public class ReportGeneratorService {
         this.reportRepository = reportRepository;
     }
 
-    public void generateExcel(HttpServletResponse response) throws Exception {
-        List<Report> reports = reportRepository.findAll();
+    public void generateExcel(HttpServletResponse response, LocalDate startingDate, LocalDate endingDate)
+            throws Exception {
+
+        List<Report> reports = reportRepository.findBySupportDateBetween(startingDate, endingDate);
 
         ServletOutputStream ops;
         try (HSSFWorkbook workbook = new HSSFWorkbook()) {

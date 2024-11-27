@@ -69,4 +69,5 @@ public class ReportService {
                 .map(report -> new ReportSummary(report.getUid(), report.getPartnerName(), report.getSupportTime(), report.getProject(),report.getSupportDate(), report.getNote()))
                 .collect(Collectors.toList());
     }
+    
 }
